@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+@import 'tailwindcss';
+
+:root { font-family: 'DM Sans', sans-serif; color: #18332f; background: #f5f4ef; font-synthesis: none; text-rendering: optimizeLegibility; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; min-height: 100vh; }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+.display { font-family: 'Playfair Display', serif; }
+.app-shell { min-height: 100vh; background: radial-gradient(circle at 10% 0%, #e4eee7 0, transparent 35%), #f5f4ef; }
+.page-wrap { width: min(100% - 32px, 1120px); margin: 0 auto; }
+.panel { border: 1px solid #dfe4dc; background: rgba(255,255,255,.74); box-shadow: 0 12px 40px rgba(31, 55, 48, .06); }
+.bottom-nav { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+@media (min-width: 768px) { .page-wrap { width: min(100% - 64px, 1120px); } }

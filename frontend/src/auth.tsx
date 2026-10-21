@@ -1,0 +1,10 @@
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { authApi } from './lib/api'
+import type { User } from './lib/api'
+
+type AuthContextValue = { user: User | null; loading: boolean; login: (email: string, password: string) => Promise<void>; register: (email: string, password: string) => Promise<void>; logout: () => void }
+const AuthContext = createContext<AuthContextValue | null>(null)
+export function AuthProvider({ children }: { children: ReactNode }) { const [user, setUser] = useState<User | null>(null); const [loading, setLoading] = useState(Boolean(localStorage.getItem('expense_token'))); useEffect(() => { if (!localStorage.getItem('expense_token')) return; authApi.me().then(({ data }) => setUser(data)).catch(() => localStorage.removeItem('expense_token')).finally(() => setLoading(false)) }, []); const login = async (email: string, password: string) => { const { data } = await authApi.login(email, password); localStorage.setItem('expense_token', data.access_token); const me = await authApi.me(); setUser(me.data) }; const register = async (email: string, password: string) => { await authApi.register(email, password); await login(email, password) }; const logout = () => { localStorage.removeItem('expense_token'); setUser(null) }; return <AuthContext.Provider value={{ user, loading, login, register, logout }}>{children}</AuthContext.Provider> }
+export function useAuth() { const context = useContext(AuthContext); if (!context) throw new Error('useAuth must be used within AuthProvider'); return context }
+export function RequireAuth({ children }: { children: ReactNode }) { const { user, loading } = useAuth(); const navigate = useNavigate(); useEffect(() => { if (!loading && !user) navigate('/login', { replace: true }) }, [loading, user, navigate]); if (loading || !user) return <div className="flex min-h-screen items-center justify-center text-sm text-[#6b7c73]">Loading your ledger...</div>; return children }

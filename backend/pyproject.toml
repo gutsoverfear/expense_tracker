@@ -1,0 +1,6 @@
+[tool.ruff]
+line-length = 100
+
+[tool.pyright]
+include = ["app", "alembic"]
+typeCheckingMode = "basic"
